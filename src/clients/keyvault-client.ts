@@ -15,7 +15,8 @@ export class KeyVaultClient {
     this.secretClient = new SecretClient(url, credential);
   }
 
-  async getSecretAsync(secretName: string): Promise<KeyVaultSecret> {
-    return await this.secretClient.getSecret(secretName);
+  async getSecretAsync(secretName: string): Promise<string> {
+    const secret = await this.secretClient.getSecret(secretName);
+    return secret.value || "";
   }
 }
