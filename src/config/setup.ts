@@ -1,9 +1,7 @@
 import * as appInsights from "applicationinsights";
+import { MSSqlClient } from "../clients/mssql.client";
 
-import { AZURE_DB_LOGIN_URL, KEY_VAULT_KEYS } from "../config/constants";
-import { getAADTokenAsync } from "./get-aad-credentials";
-import { KeyVaultClient } from "../clients/keyvault-client";
-import { MSSqlClient } from "../clients/mssql-client";
+import { dbInit } from "./db-init";
 
 /** Setup resources for API. */
 export const setup = () => {
@@ -20,19 +18,13 @@ export const setup = () => {
     .setDistributedTracingMode(appInsights.DistributedTracingModes.AI)
     .start();
 
-  // Setup for SQL server
-  const tenantId = process.env.AZURE_TENANT_ID || "";
-  Promise.all([
-    KeyVaultClient.instance.getSecretAsync(KEY_VAULT_KEYS.DatabaseClientId),
-    KeyVaultClient.instance.getSecretAsync(KEY_VAULT_KEYS.DatabaseClientSecret)
-  ]).then(([clientId, clientSecret]) => {
-    getAADTokenAsync(clientId, clientSecret, tenantId, AZURE_DB_LOGIN_URL).then(token => {
-      new MSSqlClient(token);
-      MSSqlClient.instance.db.authenticate().then(() => {
-        console.log("DB connection established!");
-      }).catch(err => {
-        console.log(`DB connection error: ${err}`);
-      });
+  // Database connection setup and sync
+  MSSqlClient.instance.db
+    .authenticate()
+    .then(() => {
+      console.log("DB connection established.")
+      dbInit();
+    }).catch(error => {
+      console.log(`DB setup error: ${error}`)
     });
-  });
 }
