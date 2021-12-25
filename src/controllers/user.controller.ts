@@ -27,14 +27,14 @@ export const userController = () => {
         lastName: lastName || null,
         passwordHash: passwordHash
       });
-      user.token = sign(
+      const token = sign(
         { userId: user.id, userName: userName },
         process.env.TOKEN_KEY as string,
         {
           expiresIn: "2h",
         }
       );
-      res.status(201).send(user);
+      res.status(201).send({ user: user, token: token });
     } catch (error) {
       console.log(`Registration error: ${error}`);
       res.status(500).send("Error occurred during registration, please try again");
@@ -49,14 +49,14 @@ export const userController = () => {
       const user = await User.findOne({ where: { userName: userName }});
 
       if (user?.checkPassword(password)) {
-        user.token = sign(
+        const token = sign(
           { userId: user.id, userName: userName },
           process.env.TOKEN_KEY as string,
           {
             expiresIn: "2h",
           }
         );
-        res.status(200).send(user);
+        res.status(200).send({ user: user, token: token });
       } else {
         res.status(401).send("Invalid login credentials");
       }
