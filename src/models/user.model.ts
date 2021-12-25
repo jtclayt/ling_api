@@ -11,6 +11,7 @@ interface UserAttributes {
   firstName: string,
   lastName: string,
   passwordHash: string,
+  token?: string,
   createdAt?: Date,
   updatedAt?: Date,
   deletedAt?: Date
@@ -23,6 +24,7 @@ export class User extends Model {
   public userName!: string;
   public firstName!: string;
   public lastName!: string;
+  public token!: string;
   private passwordHash!: string;
 
   // Timestamps
@@ -81,12 +83,14 @@ User.init({
     autoIncrement: true,
     primaryKey: true
   },
-  firstName: {
+  userName: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+
   },
+  firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
-  email: DataTypes.STRING,
+  token: DataTypes.STRING,
   passwordHash: DataTypes.STRING
 }, {
   sequelize: MSSqlClient.instance.db,
