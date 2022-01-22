@@ -1,4 +1,5 @@
 import * as appInsights from "applicationinsights";
+import cors from "cors";
 import express from "express";
 
 import { App } from "../app";
@@ -46,6 +47,10 @@ const registerExpress = () => {
   // Express endpoints and middleware
   App.instance.use(express.json());
   App.instance.use(express.urlencoded({extended: true}));
+  // Setup CORS
+  App.instance.use(cors({
+    origin: "http://localhost:3000"
+  }));
   userController();
 }
 

@@ -34,6 +34,12 @@ export class MSSqlClient {
           encrypt: true
         }
       },
+      pool: {
+        max: 2,
+        min: 0,
+        acquire: 20000,
+        idle: 12000
+      }
     });
     // beforeConnect hook not playing nicely with typescript, make config any as workaround
     this.db.addHook("beforeConnect", async (config: any) => {
