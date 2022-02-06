@@ -32,13 +32,14 @@ export class MSSqlClient {
         },
         options: {
           encrypt: true
-        }
+        },
+        connectTimeout: 30000
       },
       pool: {
         max: 2,
         min: 0,
-        acquire: 20000,
-        idle: 12000
+        acquire: 30000,
+        idle: 10000
       }
     });
     // beforeConnect hook not playing nicely with typescript, make config any as workaround

@@ -35,7 +35,7 @@ const setupAppInsights = () => {
     .setAutoCollectPerformance(true, true)
     .setAutoCollectExceptions(true)
     .setAutoCollectDependencies(true)
-    .setAutoCollectConsole(true)
+    .setAutoCollectConsole(true, true)
     .setUseDiskRetryCaching(true)
     .setSendLiveMetrics(false)
     .setDistributedTracingMode(appInsights.DistributedTracingModes.AI)
