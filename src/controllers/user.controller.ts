@@ -7,7 +7,6 @@ import { User } from "../models/user.model";
 export const userController = () => {
   // Registration logic
   App.instance.post("/register", async (req: Request, res: Response) => {
-    console.log(req.body);
     const { userName, firstName, lastName, password, checkPassword } = req.body;
 
     if (!(userName && password && checkPassword)) {
@@ -56,6 +55,7 @@ export const userController = () => {
             expiresIn: "2h",
           }
         );
+
         res.status(200).send({ user: user, token: token });
       } else {
         res.status(401).send("Invalid login credentials");
